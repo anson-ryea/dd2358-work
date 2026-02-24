@@ -1,14 +1,6 @@
-# cython: language_level=3
-# cython: boundscheck=False
-# cython: wraparound=False
-"""
-Cython-optimized Mandelbrot set computation.
-Uses typed memoryviews and C-level types for analysis and speed.
-"""
 import numpy as np
 cimport numpy as cnp
 
-# Typed mandelbrot: avoid Python complex; use two doubles for analysis/optimization
 cdef int mandelbrot(double cr, double ci, int max_iter) nogil:
     """Computes iterations before divergence. Uses real arithmetic (no Python complex)."""
     cdef double zr = 0.0
