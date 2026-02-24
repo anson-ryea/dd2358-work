@@ -1,2 +1,7 @@
 .DS_Store
 .obsidian
+
+# Cython / Python build
+asm3/build/
+asm3/*.pyd
+asm3/*.so
