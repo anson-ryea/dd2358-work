@@ -5,3 +5,7 @@
 asm3/build/
 asm3/*.pyd
 asm3/*.so
+
+project/img_out
+project/.idea
+*.hdf5

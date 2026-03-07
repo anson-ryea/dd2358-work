@@ -1,0 +1,20 @@
+[project]
+name = "project"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.9"
+dependencies = [
+    "bokeh>=3.4.3",
+    "cython>=3.2.4",
+    "dask>=2024.8.0",
+    "distributed>=2024.8.0",
+    "h5py>=3.14.0",
+    "ipykernel>=6.31.0",
+    "line-profiler>=5.0.2",
+    "matplotlib>=3.9.4",
+    "memory-profiler>=0.61.0",
+    "numpy>=2.0.2",
+    "scipy>=1.13.1",
+    "setuptools>=82.0.0",
+    "torch>=2.8.0",
+]

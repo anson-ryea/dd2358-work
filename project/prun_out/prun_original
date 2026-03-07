@@ -1,0 +1,16 @@
+         428206 function calls (420265 primitive calls) in 7.585 seconds
+
+   Ordered by: cumulative time
+   List reduced from 1456 to 10 due to restriction <10>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+      9/1    0.000    0.000    7.581    7.581 {built-in method builtins.exec}
+        1    0.460    0.460    7.581    7.581 renderer_original.py:37(render_original)
+       10    0.058    0.006    4.361    0.436 _rgi.py:645(interpn)
+       10    0.000    0.000    4.297    0.430 _rgi.py:375(__call__)
+       10    2.894    0.289    2.894    0.289 _rgi.py:520(_evaluate_linear)
+     1800    2.098    0.001    2.098    0.001 renderer_original.py:13(transferFunction)
+       10    1.435    0.143    1.461    0.146 _rgi.py:632(_find_indices)
+        3    0.006    0.002    0.249    0.083 base_events.py:1966(_run_once)
+        3    0.000    0.000    0.243    0.081 selectors.py:540(select)
+       11    0.000    0.000    0.221    0.020 pyplot.py:1245(savefig)

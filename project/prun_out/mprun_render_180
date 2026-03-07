@@ -1,0 +1,70 @@
+Filename: /Users/anson/Documents/dd2358-work/project/renderer_original.py
+
+Line #    Mem usage    Increment  Occurrences   Line Contents
+=============================================================
+    37   4528.0 MiB   4528.0 MiB           1   def render_original(path, N, Nangles):
+    38                                             """Volume Rendering"""
+    39                                         
+    40                                             # Load Datacube
+    41   3875.2 MiB   -652.8 MiB           1       f = h5.File(path, "r")
+    42   3875.2 MiB      0.0 MiB           1       datacube = np.array(f["density"])
+    43                                         
+    44                                             # Datacube Grid
+    45   3875.2 MiB      0.0 MiB           1       Nx, Ny, Nz = datacube.shape
+    46   3875.2 MiB      0.0 MiB           1       x = np.linspace(-Nx / 2, Nx / 2, Nx)
+    47   3875.2 MiB      0.0 MiB           1       y = np.linspace(-Ny / 2, Ny / 2, Ny)
+    48   3875.2 MiB      0.0 MiB           1       z = np.linspace(-Nz / 2, Nz / 2, Nz)
+    49   3875.2 MiB      0.0 MiB           1       points = (x, y, z)
+    50                                         
+    51                                             # Do Volume Rendering at Different Viewing Angles
+    52   4143.7 MiB  -1056.9 MiB          11       for i in range(Nangles):
+    53                                                 # print("Rendering Scene " + str(i + 1) + " of " + str(Nangles) + ".\n")
+    54                                         
+    55                                                 # Camera Grid / Query Points -- rotate camera view
+    56   4143.7 MiB      0.0 MiB          10           angle = np.pi / 2 * i / Nangles
+    57   4143.7 MiB      0.0 MiB          10           c = np.linspace(-N / 2, N / 2, N)
+    58   4143.7 MiB      0.0 MiB          10           qx, qy, qz = np.meshgrid(c, c, c)
+    59   4143.7 MiB      0.0 MiB          10           qxR = qx
+    60   4143.7 MiB      0.0 MiB          10           qyR = qy * np.cos(angle) - qz * np.sin(angle)
+    61   4143.7 MiB      0.0 MiB          10           qzR = qy * np.sin(angle) + qz * np.cos(angle)
+    62   4143.7 MiB      0.0 MiB          10           qi = np.array([qxR.ravel(), qyR.ravel(), qzR.ravel()]).T
+    63                                         
+    64                                                 # Interpolate onto Camera Grid
+    65   4143.7 MiB    267.0 MiB          10           camera_grid = interpn(points, datacube, qi, method="linear").reshape((N, N, N))
+    66                                         
+    67                                                 # Do Volume Rendering
+    68   4143.7 MiB      0.0 MiB          10           image = np.zeros((camera_grid.shape[1], camera_grid.shape[2], 3))
+    69                                         
+    70   4143.7 MiB      0.0 MiB        1810           for dataslice in camera_grid:
+    71   4143.7 MiB      0.0 MiB        1800               r, g, b, a = transferFunction(np.log(dataslice))
+    72   4143.7 MiB      0.0 MiB        1800               image[:, :, 0] = a * r + (1 - a) * image[:, :, 0]
+    73   4143.7 MiB      0.0 MiB        1800               image[:, :, 1] = a * g + (1 - a) * image[:, :, 1]
+    74   4143.7 MiB      0.0 MiB        1800               image[:, :, 2] = a * b + (1 - a) * image[:, :, 2]
+    75                                         
+    76   4143.7 MiB      0.0 MiB          10           image = np.clip(image, 0.0, 1.0)
+    77                                         
+    78                                                 # Plot Volume Rendering
+    79   4143.7 MiB      0.0 MiB          10           plt.figure(figsize=(4, 4), dpi=80)
+    80                                         
+    81   4143.7 MiB      1.2 MiB          10           plt.imshow(image)
+    82   4143.7 MiB      0.0 MiB          10           plt.axis("off")
+    83                                         
+    84                                                 # Save figure
+    85   4143.7 MiB      0.2 MiB          20           plt.savefig(
+    86   4143.7 MiB      0.0 MiB          10               "img_out/volumerender" + str(i) + ".png", dpi=240, bbox_inches="tight", pad_inches=0
+    87                                                 )
+    88   4143.7 MiB  -1056.9 MiB          10           plt.clf()
+    89   4143.7 MiB  -1056.9 MiB          10           plt.close('all')
+    90                                         
+    91                                             # Plot Simple Projection -- for Comparison
+    92   3086.8 MiB  -1056.9 MiB           1       plt.figure(figsize=(4, 4), dpi=80)
+    93                                         
+    94   3086.8 MiB      0.0 MiB           1       plt.imshow(np.log(np.mean(datacube, 0)), cmap="viridis")
+    95   3086.8 MiB      0.0 MiB           1       plt.clim(-5, 5)
+    96   3086.8 MiB      0.0 MiB           1       plt.axis("off")
+    97                                         
+    98                                             # Save figure
+    99   3098.0 MiB     11.2 MiB           1       plt.savefig("img_out/projection.png", dpi=240, bbox_inches="tight", pad_inches=0)
+   100   3098.0 MiB      0.0 MiB           1       plt.close()
+   101                                         
+   102   3098.0 MiB      0.0 MiB           1       return 0
